@@ -1,4 +1,7 @@
 import axios from 'axios'
+import * as Database from '../plugins/Database';
+
+
 /* eslint-disable */
 function onDeviceReady() {
   console.log('here')
@@ -34,12 +37,25 @@ function onDeviceReady() {
 
   BackgroundGeolocation.on('location', function (location) {
     console.log(location)
+    // const device_update = Object.assign({}, location);
+    // device_update.deviceId = 'testId'
+    // console.dir(device_update);
+    // async function saveDoc(device_update) {
+    //   try {
+    //     const db = await Database.get()
+    //     var doc = await db.device_updates.insert(device_update);
+    //     console.log(doc);
+    //   } catch (err) {
+    //     console.log(err);
+    //   }
+    // }
+    // saveDoc(device_update)
     axios.post('https://wt-4b2720bcf712029a2fa08942c7e9bd70-0.sandbox.auth0-extend.com/loc-test', location)
     // handle your locations here
     // to perform long running operation on iOS
     // you need to create background task
     BackgroundGeolocation.startTask(function (taskKey) {
-    axios.post('https://wt-4b2720bcf712029a2fa08942c7e9bd70-0.sandbox.auth0-extend.com/loc-test', location)
+      axios.post('https://wt-4b2720bcf712029a2fa08942c7e9bd70-0.sandbox.auth0-extend.com/loc-test', location)
 
       // execute long running task
       // eg. ajax post location
@@ -50,8 +66,19 @@ function onDeviceReady() {
 
   BackgroundGeolocation.on('stationary', function (stationaryLocation) {
     console.log(stationaryLocation)
-
-    // handle stationary locations here
+    const device_update = Object.assign({}, stationaryLocation);
+    device_update.deviceId = 'testId'
+    console.dir(device_update);
+    async function saveDoc(device_update) {
+      try {
+        const db = await Database.get()
+        var doc = await db.device_updates.insert(device_update);
+        console.log(doc);
+      } catch (err) {
+        console.log(err);
+      }
+    }
+    saveDoc(device_update)
   });
 
   BackgroundGeolocation.on('error', function (error) {
@@ -86,7 +113,9 @@ function onDeviceReady() {
   BackgroundGeolocation.on('background', function () {
     console.log('[INFO] App is in background');
     // you can also reconfigure service (changes will be applied immediately)
-    axios.post('https://wt-4b2720bcf712029a2fa08942c7e9bd70-0.sandbox.auth0-extend.com/loc-test' , {"background": "background"})
+    axios.post('https://wt-4b2720bcf712029a2fa08942c7e9bd70-0.sandbox.auth0-extend.com/loc-test', {
+      "background": "background"
+    })
 
     BackgroundGeolocation.configure({
       debug: true
@@ -95,7 +124,9 @@ function onDeviceReady() {
 
   BackgroundGeolocation.on('foreground', function () {
     console.log('[INFO] App is in foreground');
-    axios.post('https://wt-4b2720bcf712029a2fa08942c7e9bd70-0.sandbox.auth0-extend.com/loc-test' , {"background": "foreground"})
+    axios.post('https://wt-4b2720bcf712029a2fa08942c7e9bd70-0.sandbox.auth0-extend.com/loc-test', {
+      "background": "foreground"
+    })
 
     BackgroundGeolocation.configure({
       debug: false

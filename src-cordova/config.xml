@@ -7,7 +7,8 @@
     <author email="dev@cordova.apache.org" href="http://cordova.io">
         Apache Cordova Team
     </author>
-    <content src="index.html" />
+    <content src="http://192.168.1.10:8080" />
+    <allow-navigation href="http://192.168.1.10:8080" />
     <plugin name="cordova-plugin-whitelist" spec="1" />
     <access origin="*" />
     <allow-intent href="http://*/*" />
@@ -33,5 +34,6 @@
         <variable name="ACCOUNT_TYPE" value="$PACKAGE_NAME.account" />
         <variable name="CONTENT_AUTHORITY" value="$PACKAGE_NAME" />
     </plugin>
-    <engine name="android" spec="^7.0.0" />
+    <engine name="android" spec="^7.1.1" />
+    <engine name="browser" spec="^5.0.4" />
 </widget>
